@@ -1,3 +1,5 @@
+# GPT Content Summarizer
+
 This project can take youtube videos or youtube playlists, and convert them into notes and summaries using GPT
 
 

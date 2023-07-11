@@ -72,8 +72,7 @@ def main():
             new_file_path = os.oath.join(output_directory,file_path[:-4] + ".fixed.srt")
         elif os.path.isdir(output_file):
             new_file_path = os.oath.join(output_directory, file_path[:-4] + ".fixed.srt")
-            pass
-
+        else:
             new_file_path = output_file or file_path[:-4] + ".fixed.srt"
 
         process_srt(file_path, new_file_path)

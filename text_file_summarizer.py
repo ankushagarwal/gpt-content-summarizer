@@ -37,7 +37,7 @@ The summary should be in a markdown bullet(*) list format
         ]
     )
     total_tokens_used += response['usage']['total_tokens']
-    print(f"Response:\n{response['choices'][0]['message']['content']}")
+    return f"{response['choices'][0]['message']['content']}"
 
 
 def chunk_text(text, chunk_size_words, overlap_bw_chunks):
@@ -55,23 +55,21 @@ def chunk_text(text, chunk_size_words, overlap_bw_chunks):
   chunked_words = [words[i:i+n] for i in range(0, len(words), n-m)]
   return [" ".join(chunked_words[i]) for i in range(len(chunked_words))]
 
-def summarize_content(content_title, text, max_words):
+def summarize_content(content_title, text, max_words, content_type, output_filename):
 
   chunks = chunk_text(text, max_words, max_words // 10)
 
   print(f"Split the text into {len(chunks)} chunks of {max_words} words.")
 
-  # go over the chunks and print them
-  print("AI Summary and Ideas List\n")
-  for i, chunk in enumerate(chunks):
-    print(f"Part {i+1}/{len(chunks)}:\n")
-    print("Summary (Key-ideas in this section): \n")
-    print(summarize(content_title, chunk))
-    # print("\nDetailed Notes from this section: \n")
-    # print(idea_list(content_title, chunk))
-    print("\n--------\n")
+  # open the output file_name and write the summary to it
+  with open(output_filename, 'w') as f:
+    f.write(f"AI Summary and Ideas List\n\n")
+    for i, chunk in enumerate(chunks):
+      print(f"Processing chunk {i+1}/{len(chunks)}")
+      f.write(f"Part {i+1}/{len(chunks)}:\n\n")
+      f.write(f"{summarize(content_title, chunk)}\n\n")
 
-# write the main function
+
 
 def get_title_from_file_path(filepath):
   base = os.path.basename(filepath)
@@ -81,7 +79,8 @@ def get_title_from_file_path(filepath):
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--input_file', type=str)
-  parser.add_argument('--context_type', type=str, choices=['book_chapter', 'general_text', 'blog_post', 'podcast'])
+  parser.add_argument('--output_file', type=str)
+  parser.add_argument('--content_type', type=str, choices=['book_chapter', 'general_text', 'blog_post', 'podcast'])
   args = parser.parse_args()
 
 
@@ -90,12 +89,11 @@ def main():
     print(f"File '{args.input_file}' does not exist or is not accessible.")
     return
 
-  output_filename = f"{args.input_file}.summary.txt"
   # read the file into a string
   with open(args.input_file, 'r') as f:
     text = f.read()
 
-  summarize_content(get_title_from_file_path(args.input_file), text, 1500)
+  summarize_content(get_title_from_file_path(args.input_file), text, 1500, args.content_type, args.output_file)
   print(f"Estimated cost = {round(total_tokens_used * 0.0015 * 0.001, 3)} USD")
 
 

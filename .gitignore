@@ -1,3 +1,5 @@
 tmp/**/*.txt
 tmp/**/*.srt
 outputs/**/*.txt
+outputs/**/*.json
+*.epub

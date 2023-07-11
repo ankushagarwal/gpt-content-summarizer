@@ -13,15 +13,15 @@ else:
 
 total_tokens_used = 0
 
-def summarize(podcast_title, text):
+def summarize(content_title, text, content_type):
     global total_tokens_used
     system_content = f"""
-You are a brilliant podcast summarizer. You are given the following section from a podcast titled "{podcast_title}".
-Can you provide a comprehensive summary of the given text?
+You are a brilliant content summarizer. You are given the following section from a content titled "{content_title}". The content type is {content_type}.
+Can you provide a comprehensive summary of the given content?
 The summary should cover all the key points and mainideas presented in the original text, while also condensing the information into a concise and easy-to-understand format.
 Please ensure that the summary includes relevant details and examples that support the main ideas, while avoiding any unnecessary information or repetition.
 The length of the summary should be appropriate for the length and complexity of the original text, providing a clear and accurate overview without omitting any important information.
-The summary should be in a markdown bullet(*) list format
+The summary should be in a markdown list format using hyphens (-) as list delimiters.
 """
 
     user_content = f"""
@@ -67,7 +67,7 @@ def summarize_content(content_title, text, max_words, content_type, output_filen
     for i, chunk in enumerate(chunks):
       print(f"Processing chunk {i+1}/{len(chunks)}")
       f.write(f"Part {i+1}/{len(chunks)}:\n\n")
-      f.write(f"{summarize(content_title, chunk)}\n\n")
+      f.write(f"{summarize(content_title, chunk, content_type)}\n\n")
 
 
 

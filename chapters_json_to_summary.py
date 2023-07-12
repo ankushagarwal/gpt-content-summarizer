@@ -24,8 +24,15 @@ def truncate_first_line(s, max_length=150):
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('--input_json_file', type=str)
+  parser.add_argument('--output_folder_name', default='', type=str)
   args = parser.parse_args()
 
+  output_prefix = "outputs"
+  if not args.output_folder_name == '':
+     output_prefix = f"outputs/{args.output_folder_name}"
+
+  if not os.path.exists(output_prefix):
+      os.makedirs(output_prefix)
 
   with open(args.input_json_file, 'r') as f:
       book_data = json.load(f)
@@ -36,7 +43,7 @@ def main():
     chapter_name = truncate_first_line(chapter)
     print(f"Summarizing Chapter Name: {chapter_name}")
     chapter_output_file = f"tmp/{chapter_name}.txt"
-    chapter_summary_file = f"outputs/{chapter_name} Summary.txt"
+    chapter_summary_file = f"{output_prefix}/{chapter_name} Summary.txt"
 
     with open(chapter_output_file, 'w') as f:
       f.write(chapter)

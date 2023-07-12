@@ -75,5 +75,7 @@ json file and goes over chapter by chapter and writes the summary to a single fi
 Example invocation
 
 ```
-python chapters_json_to_summary.py --input_json_file outputs/Outlive.json
+python chapters_json_to_summary.py \
+  --output_folder_name outlive \
+  --input_json_file outputs/Outlive.json
 ```

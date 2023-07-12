@@ -19,6 +19,8 @@ def main():
 
   output_file = f'outputs/{title}.json'
 
+  ch_list = [ch for ch in ch_list if len(ch) > 1000]
+
   # convert ch_list to json and print it
   with open(output_file, 'w') as f:
     json.dump(ch_list, f, indent=4)

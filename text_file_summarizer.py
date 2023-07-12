@@ -32,7 +32,7 @@ The summary should be in a markdown list format using hyphens (-) as list delimi
     for attempt in range(attempts):
         try:
             response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
+                model="gpt-4",
                 messages=[
                     {"role": "system", "content": system_content},
                     {"role": "user", "content": user_content}

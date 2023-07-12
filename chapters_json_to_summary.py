@@ -39,11 +39,11 @@ def main():
 
   title = get_title_from_file_path(args.input_json_file)
 
-  for chapter in book_data:
+  for i, chapter in enumerate(book_data):
     chapter_name = truncate_first_line(chapter)
     print(f"Summarizing Chapter Name: {chapter_name}")
     chapter_output_file = f"tmp/{chapter_name}.txt"
-    chapter_summary_file = f"{output_prefix}/{chapter_name} Summary.txt"
+    chapter_summary_file = f"{output_prefix}/{(i+1):02} {chapter_name} Summary.txt"
 
     with open(chapter_output_file, 'w') as f:
       f.write(chapter)

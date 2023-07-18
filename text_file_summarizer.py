@@ -75,8 +75,8 @@ def summarize_content(content_title, text, max_words, content_type, output_filen
 
     # open the output file_name and write the summary to it
     print(f"Writing to {output_filename}")
-    with open(output_filename, 'w') as f:
-        for i, chunk in enumerate(chunks):
+    for i, chunk in enumerate(chunks):
+        with open(output_filename, 'a') as f:
             print(f"Processing chunk {i+1}/{len(chunks)}")
             f.write(f"Part {i+1}/{len(chunks)}:\n\n")
             f.write(f"{summarize(content_title, chunk, content_type)}\n\n")

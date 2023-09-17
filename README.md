@@ -5,7 +5,7 @@ This project can take youtube videos or youtube playlists, and convert them into
 
 ## Requirements
 
-* yt-dlp (brew install yt-dlp)
+* yt-dlp, ffmpeg (brew install yt-dlp ffmpeg)
 * python 3
 * pip install openai epub2txt
 * OPENAI_API_KEY as env variable

@@ -1,16 +1,17 @@
-import openai
 import os
+from openai import OpenAI
 import argparse
 import time
+
+total_tokens_used = 0
+
 # check if openai_key is set in environment variable
-if os.environ.get("OPENAI_API_KEY"):
-    openai.api_key = os.environ.get("OPENAI_API_KEY")
-else:
+if not os.environ.get("OPENAI_API_KEY"):
     # exit the program
     print("Please set the OPENAI_API_KEY environment variable.")
     exit()
 
-total_tokens_used = 0
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 
 def summarize(content_title, text, content_type):
@@ -31,13 +32,12 @@ The summary should be in a markdown list format using hyphens (-) as list delimi
     attempts = 5
     for attempt in range(attempts):
         try:
-            response = openai.ChatCompletion.create(
-                model="gpt-4",
+            response = client.chat.completions.create(
+                model="gpt-4-1106-preview",
                 messages=[
                     {"role": "system", "content": system_content},
                     {"role": "user", "content": user_content}
-                ]
-            )
+                ])
             break
         except Exception as e:
             print(f"OpenAI ChatCompletion failed: {e}. Trying again.")
@@ -47,8 +47,8 @@ The summary should be in a markdown list format using hyphens (-) as list delimi
             else:
                 raise  # Re-raise the last exception if all attempts fail
 
-    total_tokens_used += response['usage']['total_tokens']
-    return f"{response['choices'][0]['message']['content']}"
+    total_tokens_used += response.usage.total_tokens
+    return response.choices[0].message.content
 
 
 def chunk_text(text, chunk_size_words, overlap_bw_chunks):
@@ -106,9 +106,10 @@ def main():
         text = f.read()
 
     summarize_content(get_title_from_file_path(args.input_file),
-                      text, 1500, args.content_type, args.output_file)
+                      text, 2000, args.content_type, args.output_file)
+    COST_PER_TOKEN = 0.01 * 0.001  # 0.01 USD per 1000 tokens
     print(
-        f"Estimated cost = {round(total_tokens_used * 0.0015 * 0.001, 3)} USD")
+        f"Estimated cost = {round(total_tokens_used * COST_PER_TOKEN, 3)} USD")
 
 
 if __name__ == "__main__":
